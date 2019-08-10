@@ -1,5 +1,11 @@
 # Election app using ethereum blockchain
 
+# This project was created using truffle boilerplate
+
+```
+    truffle unbox pet-shop
+```
+
 ## Start ganache for local Blockchain network
 
 ## compile your smart contract using (initial)
