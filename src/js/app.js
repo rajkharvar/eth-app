@@ -56,27 +56,46 @@ App = {
       var candidateResults = $('#candidatesResults')
       candidateResults.empty()
 
-      var candidatesSelect = $('candidatesSelect')
+      var candidatesSelect = $('#candidatesSelect')
       candidatesSelect.empty()
 
       for (var i = 1; i <= candidateCount; i++) {
         electionInstance.candidates(i).then(function (candidate) {
           console.log(candidate)
           var id = candidate[0]
-          var name = candidate[1]
-          var voterCount = candidate[2]
+          var name = candidate[2]
+          var voterCount = candidate[1]
 
           var template = "<tr><th>" + id + "</th><th>" + name + "</th><th>" + voterCount + "</th></tr>"
           candidateResults.append(template)
 
-          var candidateOption = "<option value='" + id + "' >" + name + "</ option>"
+          var candidateOption = "<option value='" + id + "' >" + name + "</option>"
           candidatesSelect.append(candidateOption)
         })
       }
+      return electionInstance.voters(App.account)
+    }).then(function (hasVoted) {
+      if (hasVoted) {
+        let temp = "<p class='text-center'>You have already voted for this election</p>"
+        $(temp).insertBefore('#accountAddress')
+        $('form').hide()
+      }
       loader.hide()
       content.show()
-    }).catch(function (err) {
-      console.warn(err)
+    })
+      .catch(function (err) {
+        console.warn(err)
+      })
+  },
+
+  //  cast a vote
+  castVote: function () {
+    var candidateId = $('#candidatesSelect').val()
+    console.log(candidateId)
+    App.contracts.Election.deployed().then(function (i) {
+      return i.vote(candidateId, { from: App.account })
+    }).then(function (res) {
+      window.location.reload()
     })
   }
 };

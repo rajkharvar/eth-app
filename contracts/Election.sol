@@ -33,7 +33,7 @@ contract Election {
     // vote function
     function vote (uint _candidateId) public {
         // check if the user has not already voted
-        require(!voters[msg.sender], "Voted");
+        require(!voters[msg.sender], "Already voted");
         // check if it is valid userID
         require(_candidateId > 0 && _candidateId <= candidateCount && _candidateId > 0, "Invalid candidate Id");
         // record that voter has already voted

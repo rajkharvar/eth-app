@@ -28,12 +28,13 @@ contract("Election", function (accounts) {
 
     it("allows users to vote", function () {
         return Election.deployed().then(function (i) {
+            candidateId = 2
             electionInstance = i
-            return electionInstance.vote(2, { from: accounts[3] })
+            return electionInstance.vote(candidateId, { from: accounts[3] })
         }).then(function (receipt) {
             assert.equal(receipt.logs.length, 1, "event triggered")
             assert.equal(receipt.logs[0].event, "votedEvent", "correct event type")
-            assert.equal(receipt.logs[0].args._candidateId.toNumber(), 2, "correct voterID")
+            assert.equal(receipt.logs[0].args._candidateId.toNumber(), candidateId, "correct voterId")
             return electionInstance.voters(accounts[1])
         }).then(function (voted) {
             assert(voted, "voter has voted")
