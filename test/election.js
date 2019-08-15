@@ -25,4 +25,22 @@ contract("Election", function (accounts) {
             assert.equal(candidate[2], "Candidate 2", "correct candidate name")
         })
     })
+
+    it("allows users to vote", function () {
+        return Election.deployed().then(function (i) {
+            electionInstance = i
+            return electionInstance.vote(2, { from: accounts[3] })
+        }).then(function (receipt) {
+            assert.equal(receipt.logs.length, 1, "event triggered")
+            assert.equal(receipt.logs[0].event, "votedEvent", "correct event type")
+            assert.equal(receipt.logs[0].args._candidateId.toNumber(), 2, "correct voterID")
+            return electionInstance.voters(accounts[1])
+        }).then(function (voted) {
+            assert(voted, "voter has voted")
+            return electionInstance.candidates(2)
+        }).then(function (candidate) {
+            var voteCount = candidate[1]
+            assert.equal(voteCount, 2, "increments the candidate's vote count")
+        })
+    })
 })

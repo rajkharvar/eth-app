@@ -53,19 +53,24 @@ App = {
       electionInstance = instance
       return electionInstance.candidateCount()
     }).then(function (candidateCount) {
-      var candidateResults = $('#candidateResults')
+      var candidateResults = $('#candidatesResults')
       candidateResults.empty()
 
-      for (var i = 1; i <= candidateResults; i++) {
+      var candidatesSelect = $('candidatesSelect')
+      candidatesSelect.empty()
+
+      for (var i = 1; i <= candidateCount; i++) {
         electionInstance.candidates(i).then(function (candidate) {
           console.log(candidate)
           var id = candidate[0]
           var name = candidate[1]
           var voterCount = candidate[2]
 
-          var template = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voterCount + "</td></tr>"
+          var template = "<tr><th>" + id + "</th><th>" + name + "</th><th>" + voterCount + "</th></tr>"
           candidateResults.append(template)
-          // var candidateOption ="<option value='" + id + "' >" + name + "</ option>"
+
+          var candidateOption = "<option value='" + id + "' >" + name + "</ option>"
+          candidatesSelect.append(candidateOption)
         })
       }
       loader.hide()
