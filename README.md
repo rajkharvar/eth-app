@@ -25,3 +25,11 @@
 ```
     truffle test
 ```
+
+## Some important note about solidity
+
+```
+    view
+```
+
+### view keyword in function indicates that the function will not change the current state of contract
